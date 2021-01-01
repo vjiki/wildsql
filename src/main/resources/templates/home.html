@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-100">
+
+<head>
+    <title th:text="${title}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="cononical" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+        <header class="mb-auto" th:insert="blocks/header :: header"></header>
+
+        <main class="mb-auto px-3">
+            <h1>Park.</h1>
+            <p class="lead"> The wildlife sanctuary territory is divided into different areas
+                and we are changing them from time to time. All animal types we are monitoring belong
+                to one of predefined categories. Also we need to be able to assign a group of population to each
+                type to control endangered types
+                .</p>
+            <p class="lead">
+                <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-black">Learn more</a>
+            </p>
+        </main>
+
+        <div  th:insert="blocks/footer :: footer"></div>
+
+    </div>
+</body>
+</html>

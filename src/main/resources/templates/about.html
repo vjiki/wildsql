@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-100">
+
+<head>
+    <title th:text="${title}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="cononical" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+    <header class="mb-auto" th:insert="blocks/header :: header"></header>
+
+    <main class="mb-auto px-3">
+        <h1 th:text="${title}" />
+        <p class="lead"> Page about us</p>
+    </main>
+
+    <div  th:insert="blocks/footer :: footer"></div>
+
+</div>
+</body>
+</html>
