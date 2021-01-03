@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-100">
 
 <head>
-    <title> Park Page </title>
+    <title> Animal Type </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="cononical" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -11,9 +11,17 @@
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
     <header class="mb-auto" th:insert="blocks/header :: header"></header>
-
     <div class="container mb-auto mt-5">
-        <h1> Park Page </h1>>
+        <div th:each="el : ${animalType}" class = "alert alert-info mt-2">
+            <h3 th:text="${el.name}"/>
+            <p th:text="${el.animalClass}"/>
+            <p th:text="${el.groupOfPopulation}"/>
+            <a th:href="'/animaltype/' + ${el.id} + '/edit'" class="btn btn-warning mt-2">edit</a>
+            <form th:action="'/animaltype/' + ${el.id} + '/remove'" method="post">
+                <button class="btn btn-warning mt-2" type="submit">remove</button>
+            </form>
+
+        </div>
     </div>
 
     <div  th:insert="blocks/footer :: footer"></div>
