@@ -6,15 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
-@Entity
+@Entity // This tells Hibernate to make a table out of this class
 public class AnimalType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
     private AnimalClass animalClass;
     private GroupOfPopulation groupOfPopulation;
+    private String name;
 
     public Long getId() {
         return id;
