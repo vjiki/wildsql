@@ -1,24 +1,47 @@
 package com.github.vjiki.wildsql.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 
 @Entity
-public class TerritoryArea {
+@Table(name="areas")
+public class Area implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="area_square")
     private Double areaSquare;
 
+    @Size(max = 255)
+    @Column(name="area_name", unique = true, nullable = false)
     public String areaName;
+
+    @Size(max = 32)
+    @Column(name="area_code")
     private String areaCode;
 
+    @Size(max = 255)
+    @Column(name="person_name")
     private String personName;
+
+    @Size(max = 25)
+    @Column(name="person_phone_number")
     private String personPhoneNumber;
+
+    // @TODO
+    // Cascade type ALL can cause performance issues
+    // it can be changed to the following
+    //  {CascadeType.PERSIST,CascadeType.MERGE}
+    // https://hellokoding.com/jpa-one-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
+    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Animal> animals;
 
     public Long getId() {
         return id;
@@ -66,5 +89,17 @@ public class TerritoryArea {
 
     public void setPersonPhoneNumber(String personPhoneNumber) {
         this.personPhoneNumber = personPhoneNumber;
+    }
+
+    public Set<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(Set<Animal> animals) {
+        this.animals = animals;
+
+        for(Animal a: animals) {
+            a.setArea(this);
+        }
     }
 }
