@@ -3,7 +3,6 @@ package com.github.vjiki.wildsql.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 
@@ -101,5 +100,8 @@ public class Area implements Serializable {
         for(Animal a: animals) {
             a.setArea(this);
         }
+    }
+
+    public Area() {
     }
 }

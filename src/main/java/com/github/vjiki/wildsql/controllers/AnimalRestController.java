@@ -7,6 +7,7 @@ import com.github.vjiki.wildsql.repo.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -44,12 +45,12 @@ public class AnimalRestController {
     public ResponseEntity<Animal> update(@RequestBody Animal animal, @PathVariable long id) {
         Optional<Area> optionalArea = areaRepository.findById(animal.getArea().getId());
         if (!optionalArea.isPresent()) {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
 
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
         if (!optionalAnimal.isPresent()) {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
 
         animal.setArea(optionalArea.get());
@@ -64,7 +65,7 @@ public class AnimalRestController {
     public ResponseEntity<Animal> delete(@PathVariable long id) {
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
         if (!optionalAnimal.isPresent()) {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
 
         animalRepository.delete(optionalAnimal.get());
@@ -74,14 +75,29 @@ public class AnimalRestController {
 
     @GetMapping
     public ResponseEntity<Page<Animal>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(animalRepository.findAll(pageable));
+
+        try {
+            Page<Animal> pageAnimals;
+
+            pageAnimals = animalRepository.findAll(pageable);
+
+            if (pageAnimals.isEmpty())
+            {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(pageAnimals);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Animal> getById(@PathVariable long id) {
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
         if (!optionalAnimal.isPresent()) {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(optionalAnimal.get());

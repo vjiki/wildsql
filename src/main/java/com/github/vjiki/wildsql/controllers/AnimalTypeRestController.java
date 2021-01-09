@@ -7,69 +7,65 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/animaltypes")
 public class AnimalTypeRestController {
 
     @Autowired
     private AnimalTypeRepository animalTypeRepository;
 
-    @PostMapping("/animaltypes")
-    public ResponseEntity<?> create(@RequestBody AnimalType animalType) {
-        animalTypeRepository.save(animalType);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<AnimalType> create(@RequestBody AnimalType animalType) {
+
+        System.out.println(animalType.getName() + " " + animalType.getAnimalClass() + " " + animalType.getGroupOfPopulation());
+
+        AnimalType savedAnimalType = animalTypeRepository.save(animalType);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedAnimalType.getId()).toUri();
+
+        return ResponseEntity.created(location).body(savedAnimalType);
     }
 
-    @GetMapping("/animaltypes")
-    public ResponseEntity<Map<String, Object>> getAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
+    @GetMapping
+    public ResponseEntity<Page<AnimalType>> getAll(Pageable pageable) {
 
         try {
-            List<AnimalType> animalTypes = new ArrayList<AnimalType>();
-            Pageable paging = PageRequest.of(page, size);
-
             Page<AnimalType> pageAnimalTypes;
 
-            pageAnimalTypes = animalTypeRepository.findAll(paging);
+            pageAnimalTypes = animalTypeRepository.findAll(pageable);
 
             if (pageAnimalTypes.isEmpty())
             {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return ResponseEntity.notFound().build();
             }
 
-            animalTypes = pageAnimalTypes.getContent();
+            return ResponseEntity.ok(pageAnimalTypes);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("animalTypes", animalTypes);
-            response.put("currentPage", pageAnimalTypes.getNumber());
-            response.put("totalItems", pageAnimalTypes.getTotalElements());
-            response.put("totalPages", pageAnimalTypes.getTotalPages());
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/animaltypes/{id}")
-    public ResponseEntity<AnimalType> read(@PathVariable(name = "id") long id) {
-        Optional<AnimalType> animalType = animalTypeRepository.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<AnimalType> getById(@PathVariable(name = "id") long id) {
+        Optional<AnimalType> optionalAnimalType = animalTypeRepository.findById(id);
+        if (!optionalAnimalType.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
 
-        return animalType != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(optionalAnimalType.get());
     }
 
-    @PutMapping("/animaltypes/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") long id, @RequestBody AnimalType newAnimalType) {
-        if(!animalTypeRepository.existsById(id)){
+
+        if(animalTypeRepository.existsById(id)) {
             newAnimalType.setId(id);
         }
 
@@ -78,15 +74,16 @@ public class AnimalTypeRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/animaltypes/{id}")
-    public ResponseEntity<?> delete(@PathVariable(name = "id") long id) {
-        if(!animalTypeRepository.existsById(id)) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable(name = "id")  long id) {
+        Optional<AnimalType> optionalAnimalType = animalTypeRepository.findById(id);
+        if (!optionalAnimalType.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
 
-        animalTypeRepository.deleteById(id);
+        animalTypeRepository.delete(optionalAnimalType.get());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
 }

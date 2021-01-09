@@ -1,8 +1,7 @@
 package com.github.vjiki.wildsql.models;
 
 // @TODO rename class with better name
-public enum AnimalClass {
-
+public enum AnimalClassEnum {
     AGNATHA,
     CHRONDRICHTYES,
     OSTEICHTHYES,
@@ -10,6 +9,4 @@ public enum AnimalClass {
     REPTILIA,
     AVES,
     MAMMALIA
-    ;
-
 }

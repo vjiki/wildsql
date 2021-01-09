@@ -2,17 +2,16 @@ package com.github.vjiki.wildsql.controllers;
 
 import com.github.vjiki.wildsql.models.Area;
 import com.github.vjiki.wildsql.repo.AreaRepository;
+import com.github.vjiki.wildsql.responses.AreaResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.*;
 
 @RestController
 @RequestMapping("/api/areas")
@@ -31,7 +30,7 @@ public class AreaRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Area>> getAll(Pageable pageable) {
+    public ResponseEntity<AreaResponse> getAllWithGroup(Pageable pageable) {
 
         try {
             Page<Area> pageAreas;
@@ -43,7 +42,9 @@ public class AreaRestController {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.ok(pageAreas);
+            AreaResponse areaResponse = new AreaResponse(pageAreas);
+
+            return ResponseEntity.ok(areaResponse);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,8 +58,7 @@ public class AreaRestController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(areaRepository.findById(id));
-
+        return ResponseEntity.ok(areaRepository.findById(id).orElseThrow());
     }
 
     @PutMapping("/{id}")

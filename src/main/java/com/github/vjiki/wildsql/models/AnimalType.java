@@ -11,11 +11,11 @@ public class AnimalType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private AnimalClass animalClass;
+    //@Enumerated(EnumType.STRING)
+    private AnimalClassEnum animalClass;
 
-    @Enumerated(EnumType.STRING)
-    private GroupOfPopulation groupOfPopulation;
+    //@Enumerated(EnumType.STRING)
+    private GroupOfPopulationEnum groupOfPopulation;
 
     @Size(max = 255)
     @Column(name="animal_type_name", unique = true, nullable = false)
@@ -37,26 +37,26 @@ public class AnimalType {
         this.name = name;
     }
 
-    public AnimalClass getAnimalClass() {
+    public AnimalClassEnum getAnimalClass() {
         return animalClass;
     }
 
-    public void setAnimalClass(AnimalClass animalClass) {
+    public void setAnimalClass(AnimalClassEnum animalClass) {
         this.animalClass = animalClass;
     }
 
-    public GroupOfPopulation getGroupOfPopulation() {
+    public GroupOfPopulationEnum getGroupOfPopulation() {
         return groupOfPopulation;
     }
 
-    public void setGroupOfPopulation(GroupOfPopulation groupOfPopulation) {
+    public void setGroupOfPopulation(GroupOfPopulationEnum groupOfPopulation) {
         this.groupOfPopulation = groupOfPopulation;
     }
 
-    public AnimalType(String name, AnimalClass animalClass, GroupOfPopulation groupOfPopulation) {
-        this.name = name;
+    public AnimalType(AnimalClassEnum animalClass, GroupOfPopulationEnum groupOfPopulation, @Size(max = 255) String name) {
         this.animalClass = animalClass;
         this.groupOfPopulation = groupOfPopulation;
+        this.name = name;
     }
 
     public AnimalType() {
