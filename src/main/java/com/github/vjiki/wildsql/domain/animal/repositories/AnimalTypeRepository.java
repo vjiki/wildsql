@@ -6,7 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnimalTypeRepository extends JpaRepository<AnimalType, Long> {
-    AnimalType findByName(String name);
-
     Page<AnimalType> findAll(Pageable pageable);
 }
