@@ -1,4 +1,4 @@
-package com.github.vjiki.wildsql.models;
+package com.github.vjiki.wildsql.domain.animal.constants;
 
 public enum GroupOfPopulationEnum {
     OVERPOPULATION(10_000_000),

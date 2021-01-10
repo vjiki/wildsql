@@ -1,12 +1,16 @@
-package com.github.vjiki.wildsql.models;
+package com.github.vjiki.wildsql.domain.animal.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.vjiki.wildsql.domain.area.entities.Area;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import lombok.NoArgsConstructor;
+
 @Entity
+@NoArgsConstructor
 @Table(name="animals")
 public class Animal implements Serializable {
 
@@ -22,13 +26,20 @@ public class Animal implements Serializable {
     @Column(name="area_name")
     private String areaName;
 
+    @Size(max = 255)
+    @Column(name="animal_type_name")
+    private String animalTypeName;
+
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "area_id", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Area area;
 
-    public Animal() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "animal_type_id", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private AnimalType animalType;
 
     public Long getId() {
         return id;
@@ -54,7 +65,20 @@ public class Animal implements Serializable {
         this.area = area;
     }
 
+    public AnimalType getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(AnimalType animalType) {
+        this.animalType = animalType;
+    }
+
     public String getAreaName() {
         return this.area.getAreaName();
     }
+
+    public String getAnimalTypeName() {
+        return this.animalType.getName();
+    }
+
 }

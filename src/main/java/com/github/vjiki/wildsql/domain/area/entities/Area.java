@@ -1,12 +1,16 @@
-package com.github.vjiki.wildsql.models;
+package com.github.vjiki.wildsql.domain.area.entities;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.vjiki.wildsql.domain.animal.entities.Animal;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 import javax.validation.constraints.Size;
 
-
 @Entity
+@NoArgsConstructor
 @Table(name="areas")
 public class Area implements Serializable {
 
@@ -40,6 +44,7 @@ public class Area implements Serializable {
     // https://hellokoding.com/jpa-one-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
     @OneToMany(mappedBy = "area", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Animal> animals;
 
     public Long getId() {
@@ -100,8 +105,5 @@ public class Area implements Serializable {
         for(Animal a: animals) {
             a.setArea(this);
         }
-    }
-
-    public Area() {
     }
 }

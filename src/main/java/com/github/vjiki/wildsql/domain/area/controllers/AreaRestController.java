@@ -1,8 +1,8 @@
-package com.github.vjiki.wildsql.controllers;
+package com.github.vjiki.wildsql.domain.area.controllers;
 
-import com.github.vjiki.wildsql.models.Area;
-import com.github.vjiki.wildsql.repo.AreaRepository;
-import com.github.vjiki.wildsql.responses.AreaResponse;
+import com.github.vjiki.wildsql.domain.area.entities.Area;
+import com.github.vjiki.wildsql.domain.area.repositories.AreaRepository;
+import com.github.vjiki.wildsql.domain.area.responses.AreaResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +45,7 @@ public class AreaRestController {
             AreaResponse areaResponse = new AreaResponse(pageAreas);
 
             return ResponseEntity.ok(areaResponse);
+            //Response.ok().entity(Entity.json(result)).build();
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,9 +1,11 @@
-package com.github.vjiki.wildsql.controllers;
+package com.github.vjiki.wildsql.domain.animal.controllers;
 
-import com.github.vjiki.wildsql.models.Animal;
-import com.github.vjiki.wildsql.models.Area;
-import com.github.vjiki.wildsql.repo.AnimalRepository;
-import com.github.vjiki.wildsql.repo.AreaRepository;
+import com.github.vjiki.wildsql.domain.animal.entities.Animal;
+import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
+import com.github.vjiki.wildsql.domain.animal.repositories.AnimalTypeRepository;
+import com.github.vjiki.wildsql.domain.area.entities.Area;
+import com.github.vjiki.wildsql.domain.animal.repositories.AnimalRepository;
+import com.github.vjiki.wildsql.domain.area.repositories.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +27,25 @@ public class AnimalRestController {
     @Autowired
     private AnimalRepository animalRepository;
 
+    @Autowired
+    private AnimalTypeRepository animalTypeRepository;
+
     @PostMapping
     public ResponseEntity<Animal> create(@RequestBody Animal animal) {
         Optional<Area> optionalArea = areaRepository.findById(animal.getArea().getId());
-        if (!optionalArea.isPresent()) {
+        if (optionalArea.isEmpty()) {
             return ResponseEntity.unprocessableEntity().build();
         }
 
         animal.setArea(optionalArea.get());
+
+        Optional<AnimalType> optionalAnimalType  = animalTypeRepository.findById(animal.getAnimalType().getId());
+
+        if (optionalAnimalType.isEmpty()) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+
+        animal.setAnimalType(optionalAnimalType.get());
 
         Animal savedAnimal = animalRepository.save(animal);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -44,12 +57,12 @@ public class AnimalRestController {
     @PutMapping("/{id}")
     public ResponseEntity<Animal> update(@RequestBody Animal animal, @PathVariable long id) {
         Optional<Area> optionalArea = areaRepository.findById(animal.getArea().getId());
-        if (!optionalArea.isPresent()) {
+        if (optionalArea.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
-        if (!optionalAnimal.isPresent()) {
+        if (optionalAnimal.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -64,7 +77,7 @@ public class AnimalRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Animal> delete(@PathVariable long id) {
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
-        if (!optionalAnimal.isPresent()) {
+        if (optionalAnimal.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -96,10 +109,6 @@ public class AnimalRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Animal> getById(@PathVariable long id) {
         Optional<Animal> optionalAnimal = animalRepository.findById(id);
-        if (!optionalAnimal.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(optionalAnimal.get());
+        return optionalAnimal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

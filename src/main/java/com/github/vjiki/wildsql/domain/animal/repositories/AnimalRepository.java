@@ -1,7 +1,7 @@
-package com.github.vjiki.wildsql.repo;
+package com.github.vjiki.wildsql.domain.animal.repositories;
 
-import com.github.vjiki.wildsql.models.Animal;
-import com.github.vjiki.wildsql.models.Area;
+import com.github.vjiki.wildsql.domain.animal.entities.Animal;
+import com.github.vjiki.wildsql.domain.area.entities.Area;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 

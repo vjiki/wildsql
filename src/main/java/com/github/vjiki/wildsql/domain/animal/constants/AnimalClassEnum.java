@@ -1,4 +1,4 @@
-package com.github.vjiki.wildsql.models;
+package com.github.vjiki.wildsql.domain.animal.constants;
 
 // @TODO rename class with better name
 public enum AnimalClassEnum {

@@ -1,7 +1,7 @@
-package com.github.vjiki.wildsql.controllers;
+package com.github.vjiki.wildsql.domain.animal.controllers;
 
-import com.github.vjiki.wildsql.models.AnimalType;
-import com.github.vjiki.wildsql.repo.AnimalTypeRepository;
+import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
+import com.github.vjiki.wildsql.domain.animal.repositories.AnimalTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,11 +55,8 @@ public class AnimalTypeRestController {
     @GetMapping("/{id}")
     public ResponseEntity<AnimalType> getById(@PathVariable(name = "id") long id) {
         Optional<AnimalType> optionalAnimalType = animalTypeRepository.findById(id);
-        if (!optionalAnimalType.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+        return optionalAnimalType.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 
-        return ResponseEntity.ok(optionalAnimalType.get());
     }
 
     @PutMapping("/{id}")
@@ -77,7 +74,7 @@ public class AnimalTypeRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id")  long id) {
         Optional<AnimalType> optionalAnimalType = animalTypeRepository.findById(id);
-        if (!optionalAnimalType.isPresent()) {
+        if (optionalAnimalType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
 
