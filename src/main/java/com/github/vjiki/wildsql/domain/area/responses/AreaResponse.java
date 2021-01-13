@@ -1,7 +1,7 @@
 package com.github.vjiki.wildsql.domain.area.responses;
 
-import com.github.vjiki.wildsql.domain.animal.entities.Animal;
-import com.github.vjiki.wildsql.domain.area.entities.Area;
+import com.github.vjiki.wildsql.domain.animal.models.Animal;
+import com.github.vjiki.wildsql.domain.area.models.Area;
 import com.github.vjiki.wildsql.domain.animal.constants.GroupOfPopulationEnum;
 import org.springframework.data.domain.Page;
 

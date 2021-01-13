@@ -1,13 +1,12 @@
 package com.github.vjiki.wildsql.domain.animal.controllers;
 
-import com.github.vjiki.wildsql.domain.animal.entities.Animal;
-import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
-import com.github.vjiki.wildsql.domain.animal.repositories.AnimalTypeRepository;
+import com.github.vjiki.wildsql.domain.animal.models.Animal;
+import com.github.vjiki.wildsql.domain.animal.models.AnimalType;
+import com.github.vjiki.wildsql.domain.animal.models.repositories.AnimalTypeRepository;
 import com.github.vjiki.wildsql.domain.animal.responses.AnimalResponse;
-import com.github.vjiki.wildsql.domain.area.entities.Area;
-import com.github.vjiki.wildsql.domain.animal.repositories.AnimalRepository;
-import com.github.vjiki.wildsql.domain.area.repositories.AreaRepository;
-import com.github.vjiki.wildsql.domain.area.responses.AreaResponse;
+import com.github.vjiki.wildsql.domain.area.models.Area;
+import com.github.vjiki.wildsql.domain.animal.models.repositories.AnimalRepository;
+import com.github.vjiki.wildsql.domain.area.models.repositories.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

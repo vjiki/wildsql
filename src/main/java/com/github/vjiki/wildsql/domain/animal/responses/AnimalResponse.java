@@ -1,6 +1,6 @@
 package com.github.vjiki.wildsql.domain.animal.responses;
 
-import com.github.vjiki.wildsql.domain.animal.entities.Animal;
+import com.github.vjiki.wildsql.domain.animal.models.Animal;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;

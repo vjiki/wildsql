@@ -1,7 +1,7 @@
 package com.github.vjiki.wildsql.domain.area.controllers;
 
-import com.github.vjiki.wildsql.domain.area.entities.Area;
-import com.github.vjiki.wildsql.domain.area.repositories.AreaRepository;
+import com.github.vjiki.wildsql.domain.area.models.Area;
+import com.github.vjiki.wildsql.domain.area.models.repositories.AreaRepository;
 import com.github.vjiki.wildsql.domain.area.responses.AreaResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

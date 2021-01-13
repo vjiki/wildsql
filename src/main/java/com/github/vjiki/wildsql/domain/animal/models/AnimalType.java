@@ -1,4 +1,4 @@
-package com.github.vjiki.wildsql.domain.animal.entities;
+package com.github.vjiki.wildsql.domain.animal.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.vjiki.wildsql.domain.animal.constants.AnimalClassEnum;

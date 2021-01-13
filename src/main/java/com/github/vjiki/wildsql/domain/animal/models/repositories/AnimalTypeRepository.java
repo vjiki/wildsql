@@ -1,6 +1,6 @@
-package com.github.vjiki.wildsql.domain.animal.repositories;
+package com.github.vjiki.wildsql.domain.animal.models.repositories;
 
-import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
+import com.github.vjiki.wildsql.domain.animal.models.AnimalType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.github.vjiki.wildsql.domain.animal.controllers;
 
-import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
-import com.github.vjiki.wildsql.domain.animal.repositories.AnimalTypeRepository;
+import com.github.vjiki.wildsql.domain.animal.models.AnimalType;
+import com.github.vjiki.wildsql.domain.animal.models.repositories.AnimalTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

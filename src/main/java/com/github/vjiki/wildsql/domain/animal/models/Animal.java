@@ -1,7 +1,7 @@
-package com.github.vjiki.wildsql.domain.animal.entities;
+package com.github.vjiki.wildsql.domain.animal.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.vjiki.wildsql.domain.area.entities.Area;
+import com.github.vjiki.wildsql.domain.area.models.Area;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

@@ -1,7 +1,7 @@
-package com.github.vjiki.wildsql.domain.area.entities;
+package com.github.vjiki.wildsql.domain.area.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.vjiki.wildsql.domain.animal.entities.Animal;
+import com.github.vjiki.wildsql.domain.animal.models.Animal;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
