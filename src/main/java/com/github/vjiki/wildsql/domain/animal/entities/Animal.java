@@ -7,8 +7,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @NoArgsConstructor
 @Table(name="animals")
@@ -21,14 +23,6 @@ public class Animal implements Serializable {
     @Size(max = 255)
     @Column(name="animal_name", unique = true, nullable = false)
     private String name;
-
-    @Size(max = 255)
-    @Column(name="area_name")
-    private String areaName;
-
-    @Size(max = 255)
-    @Column(name="animal_type_name")
-    private String animalTypeName;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -49,16 +43,16 @@ public class Animal implements Serializable {
         this.id = id;
     }
 
+    public Area getArea() {
+        return area;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Area getArea() {
-        return area;
     }
 
     public void setArea(Area area) {
@@ -72,13 +66,4 @@ public class Animal implements Serializable {
     public void setAnimalType(AnimalType animalType) {
         this.animalType = animalType;
     }
-
-    public String getAreaName() {
-        return this.area.getAreaName();
-    }
-
-    public String getAnimalTypeName() {
-        return this.animalType.getName();
-    }
-
 }

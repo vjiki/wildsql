@@ -3,9 +3,11 @@ package com.github.vjiki.wildsql.domain.animal.controllers;
 import com.github.vjiki.wildsql.domain.animal.entities.Animal;
 import com.github.vjiki.wildsql.domain.animal.entities.AnimalType;
 import com.github.vjiki.wildsql.domain.animal.repositories.AnimalTypeRepository;
+import com.github.vjiki.wildsql.domain.animal.responses.AnimalResponse;
 import com.github.vjiki.wildsql.domain.area.entities.Area;
 import com.github.vjiki.wildsql.domain.animal.repositories.AnimalRepository;
 import com.github.vjiki.wildsql.domain.area.repositories.AreaRepository;
+import com.github.vjiki.wildsql.domain.area.responses.AreaResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,7 +89,7 @@ public class AnimalRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Animal>> getAll(Pageable pageable) {
+    public ResponseEntity<AnimalResponse> getAll(Pageable pageable) {
 
         try {
             Page<Animal> pageAnimals;
@@ -99,7 +101,9 @@ public class AnimalRestController {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.ok(pageAnimals);
+            AnimalResponse animalResponse = new AnimalResponse(pageAnimals, pageable);
+
+            return ResponseEntity.ok(animalResponse);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
