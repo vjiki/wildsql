@@ -42,7 +42,7 @@ public class AreaRestController {
                 return ResponseEntity.notFound().build();
             }
 
-            AreaResponse areaResponse = new AreaResponse(pageAreas);
+            AreaResponse areaResponse = new AreaResponse(pageAreas, pageable);
 
             return ResponseEntity.ok(areaResponse);
             //Response.ok().entity(Entity.json(result)).build();

@@ -23,7 +23,7 @@ public class Area implements Serializable {
 
     @Size(max = 255)
     @Column(name="area_name", unique = true, nullable = false)
-    public String areaName;
+    private String areaName;
 
     @Size(max = 32)
     @Column(name="area_code")
