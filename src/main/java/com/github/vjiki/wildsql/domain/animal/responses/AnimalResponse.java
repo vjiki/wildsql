@@ -7,9 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -56,14 +55,13 @@ public class AnimalResponse {
     }
 
     public AnimalResponse(Page<Animal> pageAnimals, Pageable pageable) {
-        Set<AnimalResponseEntry> animalResponseEntries = new HashSet<>();
+        List<AnimalResponseEntry> animalResponseEntriesList = new ArrayList<>();
 
         for (Animal animal : pageAnimals.getContent()) {
             AnimalResponseEntry animalResponseEntry = new AnimalResponseEntry(animal, animal.getArea().getAreaName(), animal.getAnimalType().getName());
-            animalResponseEntries.add(animalResponseEntry);
+            animalResponseEntriesList.add(animalResponseEntry);
         }
 
-        List<AnimalResponseEntry> animalResponseEntriesList = List.copyOf(animalResponseEntries);
         this.animalResponseEntryPage = new PageImpl<>(animalResponseEntriesList, pageable, animalResponseEntriesList.size());
     }
 
