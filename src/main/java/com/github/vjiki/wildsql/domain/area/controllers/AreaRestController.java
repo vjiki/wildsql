@@ -22,6 +22,7 @@ public class AreaRestController {
 
     @PostMapping
     public ResponseEntity<Area> create(@RequestBody Area area) {
+
         Area savedArea = areaRepository.save(area);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedArea.getId()).toUri();
@@ -45,8 +46,6 @@ public class AreaRestController {
             AreaResponse areaResponse = new AreaResponse(pageAreas, pageable);
 
             return ResponseEntity.ok(areaResponse);
-            //Response.ok().entity(Entity.json(result)).build();
-
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

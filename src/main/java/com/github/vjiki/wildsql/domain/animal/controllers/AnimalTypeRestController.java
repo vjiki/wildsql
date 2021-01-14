@@ -23,8 +23,6 @@ public class AnimalTypeRestController {
     @PostMapping
     public ResponseEntity<AnimalType> create(@RequestBody AnimalType animalType) {
 
-        System.out.println(animalType.getName() + " " + animalType.getAnimalClass() + " " + animalType.getGroupOfPopulation());
-
         AnimalType savedAnimalType = animalTypeRepository.save(animalType);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedAnimalType.getId()).toUri();

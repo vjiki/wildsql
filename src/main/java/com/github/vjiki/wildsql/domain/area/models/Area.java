@@ -2,6 +2,8 @@ package com.github.vjiki.wildsql.domain.area.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.vjiki.wildsql.domain.animal.models.Animal;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import java.util.Set;
 import javax.validation.constraints.Size;
 
 @Entity
+@Data
 @NoArgsConstructor
 @Table(name="areas")
 public class Area implements Serializable {
@@ -44,66 +47,7 @@ public class Area implements Serializable {
     // https://hellokoding.com/jpa-one-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
     @OneToMany(mappedBy = "area", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @EqualsAndHashCode.Exclude
     private Set<Animal> animals;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getAreaSquare() {
-        return areaSquare;
-    }
-
-    public void setAreaSquare(Double areaSquare) {
-        this.areaSquare = areaSquare;
-    }
-
-    public String getAreaName() {
-        return areaName;
-    }
-
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
-    }
-
-    public String getAreaCode() {
-        return areaCode;
-    }
-
-    public void setAreaCode(String areaCode) {
-        this.areaCode = areaCode;
-    }
-
-    public String getPersonName() {
-        return personName;
-    }
-
-    public void setPersonName(String personName) {
-        this.personName = personName;
-    }
-
-    public String getPersonPhoneNumber() {
-        return personPhoneNumber;
-    }
-
-    public void setPersonPhoneNumber(String personPhoneNumber) {
-        this.personPhoneNumber = personPhoneNumber;
-    }
-
-    public Set<Animal> getAnimals() {
-        return animals;
-    }
-
-    public void setAnimals(Set<Animal> animals) {
-        this.animals = animals;
-
-        for(Animal a: animals) {
-            a.setArea(this);
-        }
-    }
 }
