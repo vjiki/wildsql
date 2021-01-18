@@ -32,7 +32,7 @@ public class AnimalTypeService implements ISingleService<AnimalType, AnimalTypeD
     private DtoConverter dtoConverter;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public AnimalType getById(Long id) {
         return animalTypeRepository.getOne(id);
     }
@@ -81,7 +81,7 @@ public class AnimalTypeService implements ISingleService<AnimalType, AnimalTypeD
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<AnimalType> getList(Pageable pageable) {
         Page<AnimalType> animalTypes = animalTypeRepository.findAll(pageable);
 

@@ -8,7 +8,7 @@ public enum GroupOfPopulationEnum {
     BELOW_NORMAL(10_000),
     ENDANGERED_TYPE(2_500);
 
-    private int numberOfAnimals;
+    private final int numberOfAnimals;
 
     GroupOfPopulationEnum(int numberOfAnimals) {
         this.numberOfAnimals = numberOfAnimals;

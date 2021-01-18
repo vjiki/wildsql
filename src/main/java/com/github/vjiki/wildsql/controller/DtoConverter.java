@@ -18,7 +18,7 @@ public class DtoConverter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public AnimalDTO convertToAnimalDTO(AnimalDTORequest animalRequest) {
+    public AnimalDTO convertToAnimalDTO(AnimalCreateByNameDTO animalRequest) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
         return modelMapper.map(animalRequest, AnimalDTO.class);
     }

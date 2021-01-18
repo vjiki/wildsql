@@ -32,7 +32,7 @@ public class AreaService implements ISingleService<Area, AreaDTO> {
     private DtoConverter dtoConverter;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Area getById(Long id) {
         return areaRepository.getOne(id);
     }
@@ -83,7 +83,7 @@ public class AreaService implements ISingleService<Area, AreaDTO> {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Area> getList(Pageable pageable) {
         Page<Area> areas = areaRepository.findAll(pageable);
 

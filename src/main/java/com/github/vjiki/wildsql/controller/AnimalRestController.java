@@ -2,7 +2,7 @@ package com.github.vjiki.wildsql.controller;
 
 import com.github.vjiki.wildsql.dto.AnimalCreateDTO;
 import com.github.vjiki.wildsql.dto.AnimalDTO;
-import com.github.vjiki.wildsql.dto.AnimalDTORequest;
+import com.github.vjiki.wildsql.dto.AnimalCreateByNameDTO;
 import com.github.vjiki.wildsql.dto.AnimalUpdateDTO;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.service.common.ISingleService;
@@ -14,11 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +54,7 @@ public class AnimalRestController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AnimalDTO> update(@PathVariable("id") Long id, @RequestBody AnimalUpdateDTO animalUpdateDTO) throws ParseException {
+    public ResponseEntity<AnimalDTO> update(@PathVariable("id") Long id, @Valid @RequestBody AnimalUpdateDTO animalUpdateDTO) throws ParseException {
         AnimalDTO animalDTO = dtoConverter.convertToAnimalDTO(animalUpdateDTO);
         animalDTO.setId(id);
         return new ResponseEntity<>(dtoConverter.convertToAnimalDTO((Animal) animalService.update(animalDTO)), HttpStatus.OK);
@@ -78,7 +78,7 @@ public class AnimalRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<AnimalDTO> create(  @RequestBody AnimalCreateDTO animalCreateDTO) throws ParseException {
+    public ResponseEntity<AnimalDTO> create(@Valid  @RequestBody AnimalCreateDTO animalCreateDTO) throws ParseException {
         AnimalDTO animalDTO = dtoConverter.convertToAnimalDTO(animalCreateDTO);
         Animal animalCreated = (Animal) animalService.create(animalDTO);
 
@@ -92,7 +92,7 @@ public class AnimalRestController {
     //@TODO: not working
     @PostMapping("createbyname")
     @ResponseBody
-    public ResponseEntity<AnimalDTO> createByName(@Validated(AnimalDTORequest.class)  @RequestBody AnimalDTORequest animalRequest) throws ParseException {
+    public ResponseEntity<AnimalDTO> createByName(@Valid @RequestBody AnimalCreateByNameDTO animalRequest) throws ParseException {
         AnimalDTO animalDTO = dtoConverter.convertToAnimalDTO(animalRequest);
         Animal animalCreated = (Animal) animalService.create(animalDTO);
 

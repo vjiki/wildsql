@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class AreaRestController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AreaDTO> update(@PathVariable("id") Long id, @RequestBody AreaDTO areaDTO) throws ParseException {
+    public ResponseEntity<AreaDTO> update(@PathVariable("id") Long id, @Valid @RequestBody AreaDTO areaDTO) throws ParseException {
         areaDTO.setId(id);
         return new ResponseEntity<>(dtoConverter.convertToAreaDTO((Area) areaService.update(areaDTO)), HttpStatus.OK);
     }
@@ -74,7 +75,7 @@ public class AreaRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<AreaDTO> create( @RequestBody AreaCreateDTO areaCreateDTO) throws ParseException {
+    public ResponseEntity<AreaDTO> create( @Valid @RequestBody AreaCreateDTO areaCreateDTO) throws ParseException {
         AreaDTO areaDTO = dtoConverter.convertToAreaDTO(areaCreateDTO);
         Area areaCreated = (Area) areaService.create(areaDTO);
 

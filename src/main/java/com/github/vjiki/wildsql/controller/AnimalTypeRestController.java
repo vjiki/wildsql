@@ -21,8 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -47,7 +51,7 @@ public class AnimalTypeRestController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AnimalTypeDTO> update(@PathVariable("id") Long id, @RequestBody AnimalTypeDTO animalTypeDTO) throws ParseException {
+    public ResponseEntity<AnimalTypeDTO> update(@PathVariable("id") Long id, @Valid @RequestBody AnimalTypeDTO animalTypeDTO) throws ParseException {
         animalTypeDTO.setId(id);
         return new ResponseEntity<>(dtoConverter.convertToAnimalTypeDTO((AnimalType) animalTypeService.update(animalTypeDTO)), HttpStatus.OK);
     }
@@ -75,7 +79,7 @@ public class AnimalTypeRestController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<AnimalTypeDTO> create( @RequestBody AnimalTypeCreateDTO animalTypeCreateDTO) throws ParseException {
+    public ResponseEntity<AnimalTypeDTO> create(@Valid @RequestBody AnimalTypeCreateDTO animalTypeCreateDTO) throws ParseException {
         AnimalTypeDTO animalTypeDTO = dtoConverter.convertToAnimalTypeDTO(animalTypeCreateDTO);
 
         AnimalType animalTypeCreated = (AnimalType) animalTypeService.create(animalTypeDTO);
@@ -104,6 +108,31 @@ public class AnimalTypeRestController {
                 .buildAndExpand(animalTypeCreated.getId()).toUri());
 
         return new ResponseEntity<>(dtoConverter.convertToAnimalTypeDTO(animalTypeCreated), headers, HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("groups")
+    @ResponseBody
+    public ResponseEntity<?> getGroups() {
+        Map<String, Object> groups = new HashMap<>();
+
+        for (GroupOfPopulationEnum group : GroupOfPopulationEnum.values()) {
+            groups.put(group.toString(), group.getNumberOfAnimals());
+        }
+
+        return new ResponseEntity<>(groups, HttpStatus.OK);
+    }
+
+    @GetMapping("classes")
+    @ResponseBody
+    public ResponseEntity<?> getClasses() {
+        List<String> classes = new ArrayList<>();
+
+        for (AnimalClassEnum e : AnimalClassEnum.values()) {
+            classes.add(e.toString());
+        }
+
+        return new ResponseEntity<>(classes, HttpStatus.OK);
     }
 
 }

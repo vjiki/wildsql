@@ -41,7 +41,7 @@ public class AnimalService implements ISingleService<Animal,AnimalDTO> {
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Animal getById(Long id) {
         return animalRepository.getOne(id);
     }
@@ -102,9 +102,8 @@ public class AnimalService implements ISingleService<Animal,AnimalDTO> {
 
     }
 
-
+    @Transactional(readOnly = true)
     @Override
-    @Transactional
     public List<Animal> getList(Pageable pageable) {
 
         Page<Animal> animals = animalRepository.findAll(pageable);
@@ -140,11 +139,14 @@ public class AnimalService implements ISingleService<Animal,AnimalDTO> {
                 throw new DataIntegrityViolationException(message);
             }
 
+
             Optional<Area> optionalArea = areaRepository.findById(animalDTO.getAreaId());
             if (optionalArea.isEmpty()) {
                 final String message = Area.class + " id " + animalDTO.getAreaId().toString();
                 throw new EntityNotFoundException(message);
             }
+            animal.setArea(optionalArea.get());
+
 
             Optional<AnimalType> optionalAnimalType = animalTypeRepository.findById(animalDTO.getAnimalTypeId());
             if (optionalAnimalType.isEmpty()) {
@@ -152,7 +154,6 @@ public class AnimalService implements ISingleService<Animal,AnimalDTO> {
                 throw new EntityNotFoundException(message);
             }
 
-            animal.setArea(optionalArea.get());
             animal.setAnimalType(optionalAnimalType.get());
 
             return animalRepository.save(animal);
