@@ -3,6 +3,7 @@ package com.github.vjiki.wildsql.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.vjiki.wildsql.model.Area;
+import com.github.vjiki.wildsql.validators.ValidPhoneNumber;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +44,7 @@ public class AreaDto extends AbstractDto {
 
     @NotEmpty
     @NotBlank
+    @ValidPhoneNumber(message="Please enter a valid phone number")
     @Size(
             max = 255,
             message = "The person phone '${validatedValue}' must be max {max} characters long"
