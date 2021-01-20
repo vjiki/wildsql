@@ -4,112 +4,76 @@ import com.github.vjiki.wildsql.dto.*;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.Area;
+import com.github.vjiki.wildsql.service.common.ISingleService;
 import lombok.NoArgsConstructor;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class DtoConverter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public AnimalDTO convertToAnimalDTO(AnimalCreateByNameDTO animalRequest) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animalRequest, AnimalDTO.class);
+    @Autowired
+    private ISingleService areaService;
+
+    @Autowired
+    private ISingleService animalTypeService;
+
+    @PostConstruct
+    public void setupMapper() {
+        modelMapper.typeMap(Animal.class,AnimalDto.class)
+                .addMappings(m -> m.skip(AnimalDto::setAreaName)).addMappings(m -> m.skip(AnimalDto::setAnimalTypeName)).setPostConverter(toDtoConverter());
+        modelMapper.createTypeMap(AnimalDto.class, Animal.class)
+                .addMappings(m -> m.skip(Animal::setArea)).addMappings(m -> m.skip(Animal::setAnimalType)).setPostConverter(toEntityConverter());
     }
 
-    public AnimalDTO convertToAnimalDTO(AnimalCreateDTO animalCreateDTO) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animalCreateDTO, AnimalDTO.class);
+    public <T> T simpleConvert(Object obj, Class<T> clazz) {
+        return modelMapper.map(obj, clazz);
     }
 
-    public AnimalDTO convertToAnimalDTO(AnimalUpdateDTO animalUpdateDTO) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animalUpdateDTO, AnimalDTO.class);
+    public <T> List<T> simpleConvert(List<?> entitiesList, Class<T> clazz) {
+        return entitiesList.stream().map(x -> simpleConvert(x, clazz)).collect(Collectors.toList());
     }
 
-    public AnimalDTOResponse convertToAnimalDTOResponse(Animal animal) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animal, AnimalDTOResponse.class);
+    public Converter<Animal, AnimalDto> toDtoConverter() {
+        return context -> {
+            Animal source = context.getSource();
+            AnimalDto destination = context.getDestination();
+            mapSpecificFields(source, destination);
+            return context.getDestination();
+        };
     }
 
-    public Animal convertToAnimalEntity(AnimalDTO animalDTO) throws ParseException {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animalDTO, Animal.class);
+    public void mapSpecificFields(Animal source, AnimalDto destination) {
+        destination.setAreaName(Objects.isNull(source) || Objects.isNull(source.getId()) ? null : source.getArea().getName());
+        destination.setAnimalTypeName(Objects.isNull(source) || Objects.isNull(source.getId()) ? null : source.getAnimalType().getName());
     }
 
-    public AnimalDTO convertToAnimalDTO(Animal animal) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
+    public Converter<AnimalDto, Animal> toEntityConverter() {
+        return context -> {
+            AnimalDto source = context.getSource();
+            Animal destination = context.getDestination();
+            mapSpecificFields(source, destination);
+            return context.getDestination();
+        };
+    }
 
-        AnimalDTO animalDTO = modelMapper.map(animal, AnimalDTO.class);
-
-        if (animal.getArea() != null) {
-            animalDTO.setAreaId(animal.getArea().getId());
-            animalDTO.setAreaName(animal.getArea().getName());
+    void mapSpecificFields(AnimalDto source, Animal destination) {
+        try {
+            destination.setArea((Area) areaService.getById(source.getAreaId()));
+        } catch (NoSuchElementException e) {
+            destination.setArea(null);
         }
-
-        if (animal.getAnimalType() != null) {
-            animalDTO.setAnimalTypeId(animal.getAnimalType().getId());
-            animalDTO.setAnimalTypeName(animal.getAnimalType().getName());
+        try {
+            destination.setAnimalType((AnimalType) animalTypeService.getById(source.getAnimalTypeId()));
+        } catch (NoSuchElementException e) {
+            destination.setAnimalType(null);
         }
-
-        return animalDTO;
-    }
-
-    public AnimalType convertToAnimalTypeEntity(AnimalTypeDTO animalTypeDTO) throws ParseException {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(animalTypeDTO, AnimalType.class);
-    }
-
-    public AnimalTypeDTO convertToAnimalTypeDTO(AnimalType animalType) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-
-        return modelMapper.map(animalType, AnimalTypeDTO.class);
-    }
-
-    public AnimalTypeDTO convertToAnimalTypeDTO(AnimalTypeCreateDTO animalTypeCreateDTO) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-
-        return modelMapper.map(animalTypeCreateDTO, AnimalTypeDTO.class);
-    }
-
-    public Area convertToAreaEntity(AreaDTO areaDTO) throws ParseException {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        Area area = modelMapper.map(areaDTO, Area.class);
-        area.setName(areaDTO.getName());
-        return area;
-    }
-
-    public AreaDTO convertToAreaDTO(Area area) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(area, AreaDTO.class);
-    }
-
-    public AreaDTO convertToAreaDTO(AreaCreateDTO areaCreateDTO) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        return modelMapper.map(areaCreateDTO, AreaDTO.class);
-    }
-
-    public AreaStatDTO convertToAreaStatDTO(Area area) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE).setAmbiguityIgnored(true);
-        AreaStatDTO areaStatDTO = modelMapper.map(area, AreaStatDTO.class);
-
-        if (area.getAnimals() != null) {
-
-            Map<String, Integer> animalNumbers = new HashMap<>();
-
-            for (Animal animal : area.getAnimals()) {
-                String animalTypeName = animal.getAnimalType().getName();
-                animalNumbers.merge(animalTypeName, 1, Integer::sum);
-            }
-            areaStatDTO.setAnimalNumbers(animalNumbers);
-        }
-
-        return areaStatDTO;
     }
 }

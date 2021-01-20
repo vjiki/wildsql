@@ -1,29 +1,21 @@
 package com.github.vjiki.wildsql.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 import javax.validation.constraints.Size;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Table(name="areas")
-public class Area implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Size(max = 255)
-    @Column(name="area_name", unique = true, nullable = false)
-    private String name;
+public class Area extends AbstractEntity {
 
     @Size(max = 32)
     @Column(name="area_code")
@@ -31,7 +23,6 @@ public class Area implements Serializable {
 
     @Column(name="area_square")
     private Double areaSquare;
-
 
     @Size(max = 255)
     @Column(name="person_name")

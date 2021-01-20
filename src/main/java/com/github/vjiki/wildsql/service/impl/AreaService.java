@@ -2,129 +2,84 @@ package com.github.vjiki.wildsql.service.impl;
 
 
 import com.github.vjiki.wildsql.controller.DtoConverter;
-import com.github.vjiki.wildsql.dto.AreaDTO;
-import com.github.vjiki.wildsql.exception.MyResourceNotFoundException;
+import com.github.vjiki.wildsql.dto.AnimalTypeDto;
+import com.github.vjiki.wildsql.dto.AreaDto;
+import com.github.vjiki.wildsql.exception.MyException;
+import com.github.vjiki.wildsql.model.Animal;
+import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.Area;
+import com.github.vjiki.wildsql.model.repositories.AnimalTypeRepository;
 import com.github.vjiki.wildsql.model.repositories.AreaRepository;
+import com.github.vjiki.wildsql.service.common.ASingleService;
 import com.github.vjiki.wildsql.service.common.ISingleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
-import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
-public class AreaService implements ISingleService<Area, AreaDTO> {
-
-    @Autowired
-    private AreaRepository areaRepository;
+public class AreaService extends ASingleService<Area, AreaDto, AreaRepository>  implements ISingleService<Area, AreaDto> {
 
     @Autowired
     private DtoConverter dtoConverter;
 
-    @Override
-    @Transactional(readOnly = true)
-    public Area getById(Long id) {
-        return areaRepository.getOne(id);
+    public AreaService(AreaRepository repository) {
+        super(repository);
     }
 
     @Override
-    @Transactional
-    public void delete(Long id) {
-        Optional<Area> optionalArea = areaRepository.findById(id);
-
-        if (optionalArea.isEmpty()) {
-            final String message = Area.class + " id " + id.toString();
-            throw new EntityNotFoundException(message);
-        }
-
-        areaRepository.delete(optionalArea.get());
+    protected Class<Area> getEClass() {
+        return Area.class;
     }
 
     @Transactional
-    @Override
-    public Area update(AreaDTO areaDTO) {
+    public Area update(AreaDto areaDTO) {
 
-        try {
-            Area area = dtoConverter.convertToAreaEntity(areaDTO);
+            Area area = dtoConverter.simpleConvert(areaDTO, Area.class);
 
-            Area existingArea = areaRepository.getOne(area.getId());
+            Area existingArea = preUpdate(area.getId(), area.getName());
 
-            Area uniqueNameArea = areaRepository.findByName(area.getName());
-            if (uniqueNameArea != null) {
-                final String message = Area.class + ": Area with name "
-                        + "'" + area.getName() + "'"
-                        + " already exists with id: "
-                        + "'" + uniqueNameArea.getId() + "'";
-                throw new DataIntegrityViolationException(message);
-            }
-
+            //@TODO check existings
             existingArea.setAreaSquare(area.getAreaSquare());
             existingArea.setCode(area.getCode());
             existingArea.setName(area.getName());
             existingArea.setPersonName(area.getPersonName());
             existingArea.setPersonPhoneNumber(area.getPersonPhoneNumber());
 
-            return areaRepository.save(existingArea);
-
-        } catch (ParseException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Parse exception", e);
-        }
+            return repository.save(existingArea);
     }
 
-    @Override
     @Transactional(readOnly = true)
-    public List<Area> getList(Pageable pageable) {
-        Page<Area> areas = areaRepository.findAll(pageable);
+    public Page<AreaDto> getPageWithStat(Pageable pageable) {
 
-        if (pageable.getPageNumber() > areas.getTotalPages()) {
-            int pageNumber = pageable.getPageNumber();
-            int totalNumber = areas.getTotalPages();
-            final String message = "Page not found: "  + pageNumber + " > " + totalNumber;
-            throw new MyResourceNotFoundException(message);
-        }
+        List <AreaDto> areasDTO = dtoConverter.simpleConvert(getList(pageable), AreaDto.class);
 
-        if (areas.isEmpty())
-        {
-            final String message = "Page is empty";
-            throw new EntityNotFoundException(message);
-        }
+        for (AreaDto areaDto : areasDTO) {
+            Area area = getById(areaDto.getId());
+            if (area.getAnimals() != null) {
 
-        return areas.getContent();
-    }
+                Map<String, Integer> animalNumbers = new HashMap<>();
 
-
-    @Transactional
-    @Override
-    public Area create(AreaDTO areaDTO) {
-        try {
-            Area area = dtoConverter.convertToAreaEntity(areaDTO);
-
-            Area uniqueNameArea = areaRepository.findByName(area.getName());
-            if (uniqueNameArea != null) {
-                final String message = Area.class + ": Area with name "
-                        + "'" + area.getName() + "'"
-                        + " already exists with id: "
-                        + "'" + uniqueNameArea.getId() + "'";
-                throw new DataIntegrityViolationException(message);
+                for (Animal animal : area.getAnimals()) {
+                    String animalTypeName = animal.getAnimalType().getName();
+                    animalNumbers.merge(animalTypeName, 1, Integer::sum);
+                }
+                areaDto.setAnimalNumbers(animalNumbers);
             }
-
-            return areaRepository.save(area);
-
-        } catch (ParseException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Parse exception", e);
         }
+
+        return new PageImpl<>(areasDTO, pageable, areasDTO.size());
     }
 
 }

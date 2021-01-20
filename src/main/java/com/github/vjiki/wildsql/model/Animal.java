@@ -6,22 +6,20 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
+@Data // possibly needs to avoid use of @data annotation for entity class
+//@Getter
+//@Setter
+//@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
 @Table(name="animals")
-public class Animal implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Size(max = 255)
-    @Column(name="animal_name", unique = true, nullable = false)
-    private String name;
+public class Animal extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "area_id", nullable = false)

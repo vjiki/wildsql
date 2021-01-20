@@ -3,14 +3,13 @@ package com.github.vjiki.wildsql.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.vjiki.wildsql.constants.AnimalClassEnum;
 import com.github.vjiki.wildsql.constants.GroupOfPopulationEnum;
+import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 
@@ -18,15 +17,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name="animal_types")
-public class AnimalType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Size(max = 255)
-    @Column(name="animal_type_name", unique = true, nullable = false)
-    private String name;
+public class AnimalType extends AbstractEntity {
 
     private AnimalClassEnum animalClass;
 

@@ -1,21 +1,21 @@
 package com.github.vjiki.wildsql.service.common;
 
 import org.springframework.data.domain.Pageable;
-
-import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-@Transactional
-public interface ISingleService<T, M> {
+public interface ISingleService<E, M> {
 
-    List<T> getList(Pageable pageable);
+    List<E> getList(final Pageable pageable);
 
-    T getById(Long id);
+    E getById(final Long id) throws NoSuchElementException;
 
-    T update(M dto) throws ParseException;
+    E preUpdate(final Long id, final String name);
 
-    T create(M dto) throws ParseException;
+    E update(final M dto) throws ParseException;
 
-    void delete(Long id);
+    E create(final M dto) throws ParseException;
+
+    void delete(final Long id);
 }

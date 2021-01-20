@@ -1,7 +1,7 @@
 package com.github.vjiki.wildsql.error;
 
 import com.github.vjiki.wildsql.error.apierror.ApiError;
-import com.github.vjiki.wildsql.exception.MyResourceNotFoundException;
+import com.github.vjiki.wildsql.exception.MyException;
 import javassist.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -10,8 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,11 +22,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice // (annotations = {RestController.class, Service.class})
@@ -52,8 +47,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED,
                 ex.getLocalizedMessage(), builder.toString());
-        //@TODO: add loggin in case of exceptions
-        //logger.error("Internal Exception: ", ex);
 
         return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
@@ -140,10 +133,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = { NotFoundException.class, MyResourceNotFoundException.class })
+    @ExceptionHandler(value = NotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(
             NotFoundException ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
+        apiError.setMessage(ex.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
+
+    @ExceptionHandler(value = MyException.class)
+    protected ResponseEntity<Object> handleMyException(
+            NotFoundException ex) {
+        logger.error("My Exception: ", ex);
+
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR);
         apiError.setMessage(ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
