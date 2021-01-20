@@ -182,9 +182,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
-        //final String bodyOfResponse = "This should be application specific 3";
-        // ex.getCause() instanceof JsonMappingException, JsonParseException // for additional information later on
-        //return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.BAD_REQUEST, request);
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
         apiError.setMessage(ex.getMessage() + ex.getCause());
         return new ResponseEntity<>(apiError, headers, apiError.getStatus());

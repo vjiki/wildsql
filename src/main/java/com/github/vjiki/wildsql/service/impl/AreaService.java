@@ -2,30 +2,22 @@ package com.github.vjiki.wildsql.service.impl;
 
 
 import com.github.vjiki.wildsql.controller.DtoConverter;
-import com.github.vjiki.wildsql.dto.AnimalTypeDto;
 import com.github.vjiki.wildsql.dto.AreaDto;
-import com.github.vjiki.wildsql.exception.MyException;
 import com.github.vjiki.wildsql.model.Animal;
-import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.Area;
-import com.github.vjiki.wildsql.model.repositories.AnimalTypeRepository;
-import com.github.vjiki.wildsql.model.repositories.AreaRepository;
+import com.github.vjiki.wildsql.model.repositories.impl.AreaRepository;
 import com.github.vjiki.wildsql.service.common.ASingleService;
 import com.github.vjiki.wildsql.service.common.ISingleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service

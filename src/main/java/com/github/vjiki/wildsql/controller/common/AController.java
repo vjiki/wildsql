@@ -2,7 +2,7 @@ package com.github.vjiki.wildsql.controller.common;
 
 import com.github.vjiki.wildsql.controller.DtoConverter;
 import com.github.vjiki.wildsql.dto.AbstractDto;
-import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
+import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
 import com.github.vjiki.wildsql.service.common.ISingleService;
 import org.modelmapper.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +73,4 @@ public abstract class AController<M extends AbstractDto, E extends AbstractEntit
 
         return new ResponseEntity<>(dtoConverter.simpleConvert(eCreated, getMClass()), headers, HttpStatus.CREATED);
     }
-
-
 }

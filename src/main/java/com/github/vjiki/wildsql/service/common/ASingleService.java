@@ -2,8 +2,8 @@ package com.github.vjiki.wildsql.service.common;
 
 import com.github.vjiki.wildsql.controller.DtoConverter;
 import com.github.vjiki.wildsql.exception.MyException;
-import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
-import com.github.vjiki.wildsql.model.repositories.AbstractRepository;
+import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
+import com.github.vjiki.wildsql.model.repositories.common.AbstractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;

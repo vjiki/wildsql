@@ -1,4 +1,4 @@
-package com.github.vjiki.wildsql.model.repositories;
+package com.github.vjiki.wildsql.model.repositories.common;
 
 import lombok.Data;
 

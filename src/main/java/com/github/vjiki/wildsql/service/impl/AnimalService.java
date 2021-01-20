@@ -4,7 +4,7 @@ import com.github.vjiki.wildsql.controller.DtoConverter;
 import com.github.vjiki.wildsql.dto.AnimalDto;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.AnimalType;
-import com.github.vjiki.wildsql.model.repositories.AnimalRepository;
+import com.github.vjiki.wildsql.model.repositories.impl.AnimalRepository;
 import com.github.vjiki.wildsql.model.Area;
 import com.github.vjiki.wildsql.service.common.ASingleService;
 import com.github.vjiki.wildsql.service.common.ISingleService;

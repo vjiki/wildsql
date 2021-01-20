@@ -11,12 +11,6 @@ import java.text.ParseException;
 
 public interface IController<M> {
 
-    /*
-    @GetMapping("/")
-    @ResponseBody
-    List<M> getAll();
-     */
-
     @GetMapping("/{id}")
     @ResponseBody
     ResponseEntity<M> getById(@PathVariable("id") Long id);

@@ -1,7 +1,7 @@
 package com.github.vjiki.wildsql.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.vjiki.wildsql.model.repositories.AbstractEntity;
+import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
