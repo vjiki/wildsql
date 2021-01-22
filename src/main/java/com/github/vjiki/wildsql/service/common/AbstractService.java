@@ -17,12 +17,12 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Transactional
-public abstract class ASingleService<E extends AbstractEntity,M, R extends AbstractRepository<E>> implements ISingleService<E,M> {
+public abstract class AbstractService<E extends AbstractEntity,M, R extends AbstractRepository<E>> implements InterfaceService<E,M> {
 
     protected final R repository;
 
     @Autowired
-    public ASingleService(R repository) {
+    public AbstractService(R repository) {
         this.repository = repository;
     }
 

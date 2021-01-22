@@ -1,8 +1,8 @@
 package com.github.vjiki.wildsql.controller.impl;
 
 import com.github.vjiki.wildsql.controller.DtoConverter;
-import com.github.vjiki.wildsql.controller.common.AController;
-import com.github.vjiki.wildsql.controller.common.IController;
+import com.github.vjiki.wildsql.controller.common.AbstractController;
+import com.github.vjiki.wildsql.controller.common.InterfaceController;
 import com.github.vjiki.wildsql.dto.AnimalDto;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.service.impl.AnimalService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/animals")
-public class AnimalController extends AController<AnimalDto, Animal, AnimalService> implements IController<AnimalDto> {
+public class AnimalController extends AbstractController<AnimalDto, Animal, AnimalService> implements InterfaceController<AnimalDto> {
 
     @Autowired
     private DtoConverter dtoConverter;

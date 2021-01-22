@@ -4,15 +4,15 @@ import com.github.vjiki.wildsql.controller.DtoConverter;
 import com.github.vjiki.wildsql.dto.AnimalTypeDto;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.repositories.impl.AnimalTypeRepository;
-import com.github.vjiki.wildsql.service.common.ASingleService;
-import com.github.vjiki.wildsql.service.common.ISingleService;
+import com.github.vjiki.wildsql.service.common.AbstractService;
+import com.github.vjiki.wildsql.service.common.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class AnimalTypeService extends ASingleService<AnimalType, AnimalTypeDto, AnimalTypeRepository>  implements ISingleService<AnimalType, AnimalTypeDto> {
+public class AnimalTypeService extends AbstractService<AnimalType, AnimalTypeDto, AnimalTypeRepository> implements InterfaceService<AnimalType, AnimalTypeDto> {
 
     @Autowired
     private DtoConverter dtoConverter;

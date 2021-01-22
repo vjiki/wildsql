@@ -1,6 +1,5 @@
 package com.github.vjiki.wildsql.model.repositories.common;
 
-import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

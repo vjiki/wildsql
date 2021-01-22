@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public interface ISingleService<E, M> {
+public interface InterfaceService<E, M> {
 
     List<E> getList(final Pageable pageable);
 

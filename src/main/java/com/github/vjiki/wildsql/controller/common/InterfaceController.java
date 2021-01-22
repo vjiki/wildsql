@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 
 
-public interface IController<M> {
+public interface InterfaceController<M> {
 
     @GetMapping("/{id}")
     @ResponseBody

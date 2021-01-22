@@ -172,8 +172,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, IllegalStateException.class })
     /*500*/public ResponseEntity<Object> handleConflict(final RuntimeException ex, final WebRequest request) {
         //logger.error("500 Status Code", ex);
-        //final String bodyOfResponse = "This should be application specific 5";
-        //return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 
         ApiError apiError = new ApiError(HttpStatus.CONFLICT);
         apiError.setMessage(ex.getMessage() + ex.getCause());

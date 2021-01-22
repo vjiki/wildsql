@@ -3,7 +3,7 @@ package com.github.vjiki.wildsql.controller.common;
 import com.github.vjiki.wildsql.controller.DtoConverter;
 import com.github.vjiki.wildsql.dto.AbstractDto;
 import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
-import com.github.vjiki.wildsql.service.common.ISingleService;
+import com.github.vjiki.wildsql.service.common.InterfaceService;
 import org.modelmapper.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
-public abstract class AController<M extends AbstractDto, E extends AbstractEntity, S extends ISingleService<E,M>> implements IController<M> {
+public abstract class AbstractController<M extends AbstractDto, E extends AbstractEntity, S extends InterfaceService<E,M>> implements InterfaceController<M> {
 
     @Autowired
     private DtoConverter dtoConverter;
@@ -30,7 +30,7 @@ public abstract class AController<M extends AbstractDto, E extends AbstractEntit
     protected final S service;
 
     @Autowired
-    protected AController(S service) {
+    protected AbstractController(S service) {
         this.service = service;
     }
 

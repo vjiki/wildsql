@@ -6,8 +6,8 @@ import com.github.vjiki.wildsql.dto.AreaDto;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.Area;
 import com.github.vjiki.wildsql.model.repositories.impl.AreaRepository;
-import com.github.vjiki.wildsql.service.common.ASingleService;
-import com.github.vjiki.wildsql.service.common.ISingleService;
+import com.github.vjiki.wildsql.service.common.AbstractService;
+import com.github.vjiki.wildsql.service.common.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,9 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//@TODO avoid big number of arguments in abstract/interface classes
 @Transactional
 @Service
-public class AreaService extends ASingleService<Area, AreaDto, AreaRepository>  implements ISingleService<Area, AreaDto> {
+public class AreaService extends AbstractService<Area, AreaDto, AreaRepository> implements InterfaceService<Area, AreaDto> {
 
     @Autowired
     private DtoConverter dtoConverter;
@@ -42,7 +43,7 @@ public class AreaService extends ASingleService<Area, AreaDto, AreaRepository>  
 
             Area existingArea = preUpdate(area.getId(), area.getName());
 
-            //@TODO check existings
+            //@TODO check existing
             existingArea.setAreaSquare(area.getAreaSquare());
             existingArea.setCode(area.getCode());
             existingArea.setName(area.getName());
@@ -52,8 +53,9 @@ public class AreaService extends ASingleService<Area, AreaDto, AreaRepository>  
             return repository.save(existingArea);
     }
 
+    // @TODO make it better with Query
     @Transactional(readOnly = true)
-    public Page<AreaDto> getPageWithStat(Pageable pageable) {
+    public Page<AreaDto> getAreasWithNumberOfAnimalsPerAnimalType(Pageable pageable) {
 
         List <AreaDto> areasDTO = dtoConverter.simpleConvert(getList(pageable), AreaDto.class);
 

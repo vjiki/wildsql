@@ -6,8 +6,8 @@ import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.repositories.impl.AnimalRepository;
 import com.github.vjiki.wildsql.model.Area;
-import com.github.vjiki.wildsql.service.common.ASingleService;
-import com.github.vjiki.wildsql.service.common.ISingleService;
+import com.github.vjiki.wildsql.service.common.AbstractService;
+import com.github.vjiki.wildsql.service.common.InterfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 
 @Service
-public class AnimalService extends ASingleService<Animal, AnimalDto, AnimalRepository> implements ISingleService<Animal, AnimalDto> {
+public class AnimalService extends AbstractService<Animal, AnimalDto, AnimalRepository> implements InterfaceService<Animal, AnimalDto> {
 
     @Autowired
     private DtoConverter dtoConverter;

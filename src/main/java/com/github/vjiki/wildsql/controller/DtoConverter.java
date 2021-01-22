@@ -4,7 +4,7 @@ import com.github.vjiki.wildsql.dto.*;
 import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.Area;
-import com.github.vjiki.wildsql.service.common.ISingleService;
+import com.github.vjiki.wildsql.service.common.InterfaceService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -20,10 +20,10 @@ public class DtoConverter {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ISingleService areaService;
+    private InterfaceService areaService;
 
     @Autowired
-    private ISingleService animalTypeService;
+    private InterfaceService animalTypeService;
 
     @PostConstruct
     public void setupMapper() {

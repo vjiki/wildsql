@@ -3,8 +3,8 @@ package com.github.vjiki.wildsql.controller.impl;
 import com.github.vjiki.wildsql.constants.AnimalClassEnum;
 import com.github.vjiki.wildsql.constants.GroupOfPopulationEnum;
 import com.github.vjiki.wildsql.controller.DtoConverter;
-import com.github.vjiki.wildsql.controller.common.AController;
-import com.github.vjiki.wildsql.controller.common.IController;
+import com.github.vjiki.wildsql.controller.common.AbstractController;
+import com.github.vjiki.wildsql.controller.common.InterfaceController;
 import com.github.vjiki.wildsql.dto.AnimalTypeDto;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.service.impl.AnimalTypeService;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/animaltypes")
-public class AnimalTypeController extends AController<AnimalTypeDto, AnimalType, AnimalTypeService> implements IController<AnimalTypeDto> {
+public class AnimalTypeController extends AbstractController<AnimalTypeDto, AnimalType, AnimalTypeService> implements InterfaceController<AnimalTypeDto> {
 
     @Autowired
     private DtoConverter dtoConverter;
@@ -36,20 +36,6 @@ public class AnimalTypeController extends AController<AnimalTypeDto, AnimalType,
     protected Class<AnimalTypeDto> getMClass() {
         return AnimalTypeDto.class;
     }
-
-    @PostMapping("default")
-    @ResponseBody
-    public ResponseEntity<AnimalTypeDto> createDefault() throws ParseException {
-
-        AnimalTypeDto animalTypeDTO = new AnimalTypeDto();
-        animalTypeDTO.setId(0L);
-        animalTypeDTO.setName("UNKNOWN");
-        animalTypeDTO.setAnimalClass(AnimalClassEnum.UNKNOWN);
-        animalTypeDTO.setGroupOfPopulation(GroupOfPopulationEnum.UNKNOWN);
-
-        return create(animalTypeDTO);
-    }
-
 
     @GetMapping("groups")
     @ResponseBody

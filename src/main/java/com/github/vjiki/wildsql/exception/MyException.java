@@ -3,6 +3,8 @@ package com.github.vjiki.wildsql.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//@TODO: my exception is bad name for exception
+// use functional name like ArrayIndexOutOfBoundsException
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public final class MyException extends RuntimeException {
 
