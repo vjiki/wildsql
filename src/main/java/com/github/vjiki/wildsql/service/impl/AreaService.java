@@ -55,25 +55,19 @@ public class AreaService extends AbstractService<Area, AreaDto, AreaRepository> 
 
     // @TODO make it better with Query
     @Transactional(readOnly = true)
-    public Page<AreaDto> getAreasWithNumberOfAnimalsPerAnimalType(Pageable pageable) {
+    public Map<String, Integer> getNumberOfAnimalsPerAnimalType(AreaDto areaDto) {
+        Area area = getById(areaDto.getId());
+        if (area.getAnimals() != null) {
 
-        List <AreaDto> areasDTO = dtoConverter.simpleConvert(getList(pageable), AreaDto.class);
+            Map<String, Integer> animalNumbers = new HashMap<>();
 
-        for (AreaDto areaDto : areasDTO) {
-            Area area = getById(areaDto.getId());
-            if (area.getAnimals() != null) {
-
-                Map<String, Integer> animalNumbers = new HashMap<>();
-
-                for (Animal animal : area.getAnimals()) {
-                    String animalTypeName = animal.getAnimalType().getName();
-                    animalNumbers.merge(animalTypeName, 1, Integer::sum);
-                }
-                areaDto.setAnimalNumbers(animalNumbers);
+            for (Animal animal : area.getAnimals()) {
+                String animalTypeName = animal.getAnimalType().getName();
+                animalNumbers.merge(animalTypeName, 1, Integer::sum);
             }
+            return animalNumbers;
         }
-
-        return new PageImpl<>(areasDTO, pageable, areasDTO.size());
+        return null;
     }
 
 }

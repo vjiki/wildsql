@@ -39,7 +39,7 @@ public abstract class AbstractController<M extends AbstractDto, E extends Abstra
         try {
             return new ResponseEntity<>(dtoConverter.simpleConvert(service.getById(id), getMClass()), HttpStatus.OK);
         } catch (MappingException ex) {
-            final String message = "Skipping MappingException, not found: " + getMClass() + " id " + id.toString();
+            final String message = "Skipping MappingException: " + ex.getMessage() + ". Raise not found: " + getMClass() + " id " + id.toString();
             throw  new EntityNotFoundException(message);
         }
     }

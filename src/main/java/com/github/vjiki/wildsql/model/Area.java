@@ -5,8 +5,10 @@ import com.github.vjiki.wildsql.model.repositories.common.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import javax.validation.constraints.Size;
 
@@ -41,5 +43,6 @@ public class Area extends AbstractEntity {
             cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @EqualsAndHashCode.Exclude
-    private Set<Animal> animals;
+    @ToString.Exclude
+    private Set<Animal> animals = new HashSet<>();
 }
