@@ -5,6 +5,7 @@ import com.github.vjiki.wildsql.model.Animal;
 import com.github.vjiki.wildsql.model.AnimalType;
 import com.github.vjiki.wildsql.model.Area;
 import com.github.vjiki.wildsql.service.common.InterfaceService;
+import com.github.vjiki.wildsql.service.impl.AreaService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -28,9 +29,16 @@ public class DtoConverter {
     @PostConstruct
     public void setupMapper() {
         modelMapper.typeMap(Animal.class,AnimalDto.class)
-                .addMappings(m -> m.skip(AnimalDto::setAreaName)).addMappings(m -> m.skip(AnimalDto::setAnimalTypeName)).setPostConverter(toDtoConverter());
-        modelMapper.createTypeMap(AnimalDto.class, Animal.class)
-                .addMappings(m -> m.skip(Animal::setArea)).addMappings(m -> m.skip(Animal::setAnimalType)).setPostConverter(toEntityConverter());
+                .addMappings(m -> m.skip(AnimalDto::setAreaName))
+                .addMappings(m -> m.skip(AnimalDto::setAnimalTypeName))
+                .setPostConverter(toDtoConverter());
+        modelMapper.typeMap(AnimalDto.class, Animal.class)
+                .addMappings(m -> m.skip(Animal::setArea))
+                .addMappings(m -> m.skip(Animal::setAnimalType))
+                .setPostConverter(toEntityConverter());
+        modelMapper.typeMap(Area.class, AreaDto.class)
+                .addMappings(m -> m.skip(AreaDto::setAnimalNumbers))
+                .setPostConverter(toAreaDtoConverter());
     }
 
     public <T> T simpleConvert(Object obj, Class<T> clazz) {
@@ -75,5 +83,19 @@ public class DtoConverter {
         } catch (NoSuchElementException e) {
             destination.setAnimalType(null);
         }
+    }
+
+    public Converter<Area, AreaDto> toAreaDtoConverter() {
+        return context -> {
+            Area source = context.getSource();
+            AreaDto destination = context.getDestination();
+            mapSpecificFields(source, destination);
+            return context.getDestination();
+        };
+    }
+
+    public void mapSpecificFields(Area source, AreaDto destination) {
+        AreaService service = (AreaService) areaService;
+        destination.setAnimalNumbers(Objects.isNull(source) || Objects.isNull(source.getId()) ? null : service.getNumberOfAnimalsPerAnimalType(destination));
     }
 }

@@ -35,17 +35,4 @@ public class AreaController extends AbstractController<AreaDto, Area, AreaServic
     protected Class<AreaDto> getMClass() {
         return AreaDto.class;
     }
-
-    @Override
-    public ResponseEntity<Page<AreaDto>> getAll(Pageable pageable) {
-
-        List<AreaDto> areasDTO = dtoConverter.simpleConvert(service.getList(pageable), AreaDto.class);
-
-        // Shall we do it in one transaction? get areas and get numbers?
-        for (AreaDto areaDto : areasDTO) {
-            areaDto.setAnimalNumbers(service.getNumberOfAnimalsPerAnimalType(areaDto));
-        }
-
-        return new ResponseEntity<>(new PageImpl<>(areasDTO, pageable, areasDTO.size()), HttpStatus.OK);
-    }
 }
